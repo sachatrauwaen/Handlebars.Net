@@ -102,17 +102,20 @@ namespace Handlebars.Compiler
             Action<TextWriter, object> ifEmpty)
         {
             context.Index = 0;
-            foreach (MemberInfo member in target.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public).OfType<MemberInfo>()
-                .Concat(
-                    target.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
-                ))
+            if (target != null)
             {
-                context.Key = member.Name;
-                var value = AccessMember(target, member);
-                context.First = (context.Index == 0);
-                template(context.TextWriter, value);
-                context.Index++;
+                foreach (MemberInfo member in target.GetType()
+                    .GetProperties(BindingFlags.Instance | BindingFlags.Public).OfType<MemberInfo>()
+                    .Concat(
+                        target.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
+                    ))
+                {
+                    context.Key = member.Name;
+                    var value = AccessMember(target, member);
+                    context.First = (context.Index == 0);
+                    template(context.TextWriter, value);
+                    context.Index++;
+                }
             }
             if (context.Index == 0)
             {
