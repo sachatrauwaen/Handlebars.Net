@@ -143,7 +143,7 @@ namespace HandlebarsDotNet.Compiler
 
         private static bool IsNonListDynamic(object target){
             var interfaces = target.GetType().GetInterfaces();
-            return interfaces.Contains(typeof (IDynamicMetaObjectProvider)) && !interfaces.Contains(typeof(IList));
+            return interfaces.Contains(typeof (IDynamicMetaObjectProvider)) && !interfaces.Contains(typeof(IList)) && !interfaces.Contains(typeof(IEnumerable));
         }
 
         private static bool IsGenericDictionary(object target)

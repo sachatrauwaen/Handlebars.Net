@@ -109,17 +109,38 @@ namespace HandlebarsDotNet.Compiler
                 }
                 else
                 {
-                    foreach (var memberName in segment.Split('.'))
+                    while (context != null)
                     {
-                        try
+                        bool memberFound = true;
+                        foreach (var memberName in segment.Split('.'))
                         {
-                            instance = this.ResolveValue(context, instance, memberName);
+                            try
+                            {
+                                instance = this.ResolveValue(context, instance, memberName);
+                                if (instance == null)
+                                {
+                                    memberFound = false;
+                                    break;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                instance = new UndefinedBindingResult();
+                                memberFound = false;
+                                break;
+                            }
+
                         }
-                        catch (Exception)
+                        if (memberFound)
                         {
-                            instance = new UndefinedBindingResult();
                             break;
                         }
+                        context = context.ParentContext;
+                        if (context == null)
+                        {
+                            break;
+                        }
+                        instance = context.Value;
                     }
                 }
             }
