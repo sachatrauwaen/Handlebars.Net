@@ -90,6 +90,7 @@ namespace HandlebarsDotNet.Test
             Assert.AreEqual("Key1Val1Key2Val2", output);
         }
 
+
         private class MyDynamicModel : DynamicObject
         {
             private Dictionary<string, object> properties = new Dictionary<string, object>
